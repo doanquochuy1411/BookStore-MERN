@@ -1,1 +1,1 @@
-export { default } from "./layoutMain"
+export { default } from "./LayoutMain"

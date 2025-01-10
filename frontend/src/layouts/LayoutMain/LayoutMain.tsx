@@ -1,6 +1,6 @@
 import { Outlet } from "react-router"
-import Navbar from "../../components/Nabar/Navbar"
-import Footer from "../../components/Nabar/Footer"
+import Footer from "../../components/Footer"
+import Navbar from "../../components/Nabar"
 
 const LayoutMain: React.FC = (): JSX.Element => {
     return (

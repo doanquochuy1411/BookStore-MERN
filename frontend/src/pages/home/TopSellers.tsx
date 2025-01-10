@@ -70,8 +70,8 @@ const TopSellers = () => {
             >
                 {
                     filteredBooks.length > 0 && filteredBooks.map((book, index) => (
-                        <SwiperSlide>
-                            <BookCard key={index} book={book} />
+                        <SwiperSlide key={index}>
+                            <BookCard book={book} />
                         </SwiperSlide>
 
                     ))
