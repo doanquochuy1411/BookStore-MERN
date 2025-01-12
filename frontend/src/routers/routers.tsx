@@ -5,6 +5,7 @@ import PATH from "./Path";
 import Register from "../pages/register/Register";
 import CartPage from "../pages/books/CartPage";
 import Login from "../pages/login/Login";
+import Checkout from "../pages/checkout/Checkout";
 
 const useRouteElements = () => {
     let element = useRoutes([
@@ -31,7 +32,11 @@ const useRouteElements = () => {
                 {
                     path: PATH.CART,
                     element: <CartPage />
-                }
+                },
+                {
+                    path: PATH.CHECKOUT,
+                    element: <Checkout />
+                },
 
             ]
         }

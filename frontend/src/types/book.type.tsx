@@ -8,3 +8,4 @@ export interface Book {
     oldPrice: number;
     newPrice: number;
 }
+

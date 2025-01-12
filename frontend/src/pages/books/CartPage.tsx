@@ -4,7 +4,7 @@ import { RootState } from "../../redux/store"
 import { getImgUrl } from "../../utils/getImgUrl"
 import { useMemo } from "react"
 import { Book } from "../../types/book.type"
-import { removeFromCart } from "../../redux/features/cart/cart.slice"
+import { clearCart, removeFromCart } from "../../redux/features/cart/cart.slice"
 
 const CartPage = () => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems)
@@ -18,6 +18,10 @@ const CartPage = () => {
         dispatch(removeFromCart(product))
     }
 
+    const handleClearCart = () => {
+        dispatch(clearCart())
+    }
+
     return (
         <div className="flex mt-12 h-full flex-col overflow-hidden bg-white shadow-xl">
             <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
@@ -26,7 +30,7 @@ const CartPage = () => {
                     <div className="ml-3 flex h-7 items-center ">
                         <button
                             type="button"
-                            // onClick={handleClearCart}
+                            onClick={handleClearCart}
                             className="relative -m-2 py-1 px-2 bg-red-500 text-white rounded-md hover:bg-secondary transition-all duration-200  "
                         >
                             <span className="">Clear Cart</span>

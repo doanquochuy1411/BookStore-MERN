@@ -4,6 +4,7 @@ const PATH = {
     REGISTER: "register",
     ORDER: "order",
     CART: "cart",
+    CHECKOUT: "checkout",
 }
 
 export default PATH;
