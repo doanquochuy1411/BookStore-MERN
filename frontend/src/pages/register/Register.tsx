@@ -1,16 +1,32 @@
 import { SubmitHandler, useForm } from "react-hook-form"
 import { LoginPayload } from "../../types/login.type"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { FaGoogle } from "react-icons/fa"
+import { useAuth } from "../../context/AuthContext"
 
 const Register = () => {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<LoginPayload>()
+    const { register, handleSubmit, setError, formState: { errors } } = useForm<LoginPayload>()
+    const { registerUser, signInWithGoogle } = useAuth();
+    const navigate = useNavigate();
+
     const onSubmit: SubmitHandler<LoginPayload> = (data) => {
-        console.log("data login", data)
+        console.log("data register", data)
+        registerUser(data).then(() => {
+            alert("User registered successfully!");
+        }).catch((error) => {
+            setError("email", { type: "manual", message: error.message || "Registration failed. Please try again." });
+        })
     }
 
     const handelGoogleSignIn = () => {
-
+        signInWithGoogle()
+            .then(() => {
+                alert("Login with google successfully!")
+                navigate("/");
+            }).catch((error) => {
+                alert("Google sign in failed!")
+                console.error(error)
+            })
     }
 
     return (

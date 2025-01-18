@@ -40,6 +40,7 @@ const getSingleBook = async (req, res) =>{
             res.status(StatusCodes.NOT_FOUND).send(
                 ErrorResponse(StatusCodes.NOT_FOUND,"Book not found")
             )
+            return
         }
         res.status(StatusCodes.OK).send(
             SuccessResponse(StatusCodes.OK, book, "The book fetched successfully")

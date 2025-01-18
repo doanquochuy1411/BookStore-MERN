@@ -1,6 +1,7 @@
 export interface Book {
     _id: string;
     title: string;
+    auth: string;
     description: string;
     category: string;
     trending: string;

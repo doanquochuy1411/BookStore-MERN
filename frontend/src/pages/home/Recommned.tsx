@@ -6,15 +6,16 @@ import { Navigation, Pagination } from 'swiper/modules'
 
 import 'swiper/swiper-bundle.css';
 import BookCard from '../books/BookCard';
+import { useQuery } from '@tanstack/react-query';
+import { fetchAllBooks } from '../../apis/books/books.api';
 
 const Recommned = () => {
-    const [books, setBooks] = useState<Book[]>([])
-
-    useEffect(() => {
-        fetch("books.json")
-            .then(res => res.json())
-            .then((data) => setBooks(data))
-    }, [])
+    const { data: books = [] } = useQuery<Book[]>({
+        queryKey: ["books"],
+        queryFn: fetchAllBooks,
+        gcTime: 0,
+        staleTime: 0
+    })
 
     return (
         <div className='py-16'>

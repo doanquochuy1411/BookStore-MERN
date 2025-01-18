@@ -8,6 +8,7 @@ import { TiHeartOutline } from "react-icons/ti";
 import avatarImg from "../../assets/avatar.png"
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import { useAuth } from '../../context/AuthContext';
 
 const navigation = [
     { name: "Dashboard", href: "/dashboard" },
@@ -20,7 +21,11 @@ const Navbar = () => {
     const [isDropdownOpen, setDropdownOpen] = useState(false)
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
 
-    const currentUser = false;
+    const { currentUser, logout } = useAuth();
+
+    const handelLogout = () => {
+        logout();
+    }
 
     return (
         <header className='max-w-screen-2xl mx-auto px-4 py-6'>
@@ -67,6 +72,14 @@ const Navbar = () => {
                                                         </li>
                                                     ))
                                                 }
+                                                <li>
+                                                    <button
+                                                        onClick={handelLogout}
+                                                        className='block w-full text-left px-4 py-2 text-sm hover:bg-gray-100'
+                                                    >
+                                                        Logout
+                                                    </button>
+                                                </li>
                                             </ul>
                                         </div>
                                     )

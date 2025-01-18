@@ -1,16 +1,27 @@
 import { useSelector } from "react-redux"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { RootState } from "../../redux/store"
 import { Book } from "../../types/book.type"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { FormCheckout } from "../../types/checkout.type"
 import { useState } from "react"
+import { useAuth } from "../../context/AuthContext"
+import { useMutation } from "@tanstack/react-query"
+import { createOrder } from "../../apis/orders/orders.api"
+import PATH from "../../routers/Path"
 
 const Checkout = () => {
     const [isChecked, setIsChecked] = useState<boolean>(false);
 
+    const navigate = useNavigate();
+
     const cartItems = useSelector((state: RootState) => state.cart.cartItems)
-    const totalPrice = cartItems.reduce((acc: number, item: Book) => acc + item.newPrice, 0).toFixed(2);
+    const totalPrice: number = Math.round(
+        cartItems.reduce((acc: number, item: Book) => acc + item.newPrice, 0) * 100
+    ) / 100;
+
+    const { currentUser } = useAuth();
+    // console.log(currentUser)
 
     const {
         register,
@@ -19,15 +30,30 @@ const Checkout = () => {
         formState: { errors }
     } = useForm<FormCheckout>()
 
+    const { mutate: handelCreateOrder, isPending } = useMutation({
+        mutationKey: ['createOrder'],
+        mutationFn: (payload: FormCheckout) => createOrder(payload),
+        onSuccess: () => {
+            alert("Your order has beenCreated order successfully")
+            navigate(PATH.ORDER)
+        },
+        onError: (err) => {
+            console.log("failed to create order: ", err)
+            alert("Failed to create order")
+        }
+    })
+
     const onSubmit: SubmitHandler<FormCheckout> = (data) => {
         const newOrder = {
             ...data,
-            product_ids: cartItems.map((item) => item._id),
-            total_price: totalPrice
+            productIds: cartItems.map((item) => item._id),
+            totalPrice: totalPrice
         }
+
+        handelCreateOrder(newOrder)
     }
 
-    const currentUser = true; // TODO: get user from auth
+    isPending && <div>Loading....</div>
 
     return (
         <section>
@@ -64,9 +90,9 @@ const Checkout = () => {
                                             <input
                                                 type="text" id="email" className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                                                 disabled
-                                                // defaultValue={currentUser?.email}
-                                                defaultValue="email@gmail.com"
-                                                placeholder="email@domain.com"
+                                                defaultValue={currentUser?.email}
+                                                // defaultValue="email@gmail.com"
+                                                // placeholder="email@domain.com"
                                                 {...register("email", { required: true })}
                                             />
 

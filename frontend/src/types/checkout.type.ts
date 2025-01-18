@@ -3,8 +3,8 @@ export interface FormCheckout {
     email: string
     phone: string
     address: AddressType
-    product_ids: string[]
-    total_price: number
+    productIds: string[]
+    totalPrice: number
 }
 
 export interface AddressType {

@@ -17,7 +17,10 @@ app.use(cors({
 
 // routes
 const bookRoutes = require('./src/books/book.route')
+const orderRoutes = require('./src/orders/order.route')
+
 app.use("/api/books", bookRoutes)
+app.use("/api/orders", orderRoutes)
 
 async function main() {
     await mongoose.connect(process.env.DB_URL)
@@ -32,4 +35,12 @@ main().then(()=>{
 
 app.listen(port, ()=>{
     console.log(`Example app listening on port ${port}`)
+})
+
+process.on('SIGINT', () =>{
+    console.log("Server has been stopped!");
+    server.close(() => {
+        console.log('Server closed gracefully');
+        process.exit(0); // Đảm bảo ứng dụng thoát sau khi đóng server
+    });
 })

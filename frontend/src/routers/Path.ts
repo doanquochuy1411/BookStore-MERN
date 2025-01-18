@@ -5,6 +5,7 @@ const PATH = {
     ORDER: "order",
     CART: "cart",
     CHECKOUT: "checkout",
+    BOOK_DETAILS: "books/:id",
 }
 
 export default PATH;

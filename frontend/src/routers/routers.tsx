@@ -6,6 +6,9 @@ import Register from "../pages/register/Register";
 import CartPage from "../pages/books/CartPage";
 import Login from "../pages/login/Login";
 import Checkout from "../pages/checkout/Checkout";
+import SingleBook from "../pages/books/SingleBook";
+import PrivateRoute from "./PrivateRoute";
+import Order from "../pages/orders/Order";
 
 const useRouteElements = () => {
     let element = useRoutes([
@@ -19,7 +22,7 @@ const useRouteElements = () => {
                 },
                 {
                     path: PATH.ORDER,
-                    element: <div>Order</div>
+                    element: <PrivateRoute><Order /></PrivateRoute>
                 },
                 {
                     path: PATH.LOGIN,
@@ -35,7 +38,11 @@ const useRouteElements = () => {
                 },
                 {
                     path: PATH.CHECKOUT,
-                    element: <Checkout />
+                    element: <PrivateRoute><Checkout /></PrivateRoute>
+                },
+                {
+                    path: PATH.BOOK_DETAILS,
+                    element: <SingleBook />
                 },
 
             ]
