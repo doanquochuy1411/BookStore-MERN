@@ -9,6 +9,8 @@ import Checkout from "../pages/checkout/Checkout";
 import SingleBook from "../pages/books/SingleBook";
 import PrivateRoute from "./PrivateRoute";
 import Order from "../pages/orders/Order";
+import AdminRoute from "./AdminRoute";
+import AdminLogin from "../pages/login/AdminLogin";
 
 const useRouteElements = () => {
     let element = useRoutes([
@@ -44,7 +46,32 @@ const useRouteElements = () => {
                     path: PATH.BOOK_DETAILS,
                     element: <SingleBook />
                 },
-
+                {
+                    path: PATH.ADMIN,
+                    element: <AdminLogin />
+                },
+                {
+                    path: PATH.DASHBOARD,
+                    element: <AdminRoute><div>Admin Dashboard</div></AdminRoute>,
+                    children: [
+                        {
+                            path: PATH.DASHBOARD,
+                            element: <div>Dashboard Home</div>
+                        },
+                        {
+                            path: PATH.ADD_NEW_BOOK,
+                            element: <div>Add new book</div>
+                        },
+                        {
+                            path: PATH.EDIT_BOOK,
+                            element: <div>Edit book</div>
+                        },
+                        {
+                            path: PATH.MANAGE_BOOK,
+                            element: <div>Manage books</div>
+                        },
+                    ]
+                },
             ]
         }
     ])
