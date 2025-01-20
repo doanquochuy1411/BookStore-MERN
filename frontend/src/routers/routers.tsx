@@ -15,6 +15,7 @@ import LayoutDashboard from "../layouts/LayoutDashboard";
 import Dashboard from "../pages/dashboard/Dashboard";
 import ManageBooks from "../pages/dashboard/ManageBooks/ManageBooks";
 import AddBook from "../pages/dashboard/addBook/AddBook";
+import UpdateBook from "../pages/dashboard/editBook/UpdateBook";
 
 const useRouteElements = () => {
     let element = useRoutes([
@@ -70,7 +71,7 @@ const useRouteElements = () => {
                 },
                 {
                     path: PATH.EDIT_BOOK,
-                    element: <div>Edit book</div>
+                    element: <UpdateBook />
                 },
                 {
                     path: PATH.MANAGE_BOOK,
