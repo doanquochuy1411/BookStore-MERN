@@ -10,11 +10,11 @@ const fetcherApi: AxiosInstance = axios.create({
 
 fetcherApi.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 
-    // if (getLocalStorage(ACCESS_TOKEN)) {
-    //     config.headers.Authorization = `Bearer ${getLocalStorage(ACCESS_TOKEN)}`
-    //     //     config.headers["Content-Type"] =
-    //     //   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    // }
+    if (getLocalStorage(ACCESS_TOKEN)) {
+        config.headers.Authorization = `Bearer ${getLocalStorage(ACCESS_TOKEN)}`
+        //     config.headers["Content-Type"] =
+        //   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    }
 
     if (apiKey) {
         config.headers["x-api-key"] = apiKey

@@ -11,6 +11,10 @@ import PrivateRoute from "./PrivateRoute";
 import Order from "../pages/orders/Order";
 import AdminRoute from "./AdminRoute";
 import AdminLogin from "../pages/login/AdminLogin";
+import LayoutDashboard from "../layouts/LayoutDashboard";
+import Dashboard from "../pages/dashboard/Dashboard";
+import ManageBooks from "../pages/dashboard/ManageBooks/ManageBooks";
+import AddBook from "../pages/dashboard/addBook/AddBook";
 
 const useRouteElements = () => {
     let element = useRoutes([
@@ -49,28 +53,28 @@ const useRouteElements = () => {
                 {
                     path: PATH.ADMIN,
                     element: <AdminLogin />
+                }
+            ]
+        },
+        {
+            path: PATH.DASHBOARD,
+            element: <AdminRoute> <LayoutDashboard /></AdminRoute>,
+            children: [
+                {
+                    index: true,
+                    element: <Dashboard />
                 },
                 {
-                    path: PATH.DASHBOARD,
-                    element: <AdminRoute><div>Admin Dashboard</div></AdminRoute>,
-                    children: [
-                        {
-                            path: PATH.DASHBOARD,
-                            element: <div>Dashboard Home</div>
-                        },
-                        {
-                            path: PATH.ADD_NEW_BOOK,
-                            element: <div>Add new book</div>
-                        },
-                        {
-                            path: PATH.EDIT_BOOK,
-                            element: <div>Edit book</div>
-                        },
-                        {
-                            path: PATH.MANAGE_BOOK,
-                            element: <div>Manage books</div>
-                        },
-                    ]
+                    path: PATH.ADD_NEW_BOOK,
+                    element: <AddBook />
+                },
+                {
+                    path: PATH.EDIT_BOOK,
+                    element: <div>Edit book</div>
+                },
+                {
+                    path: PATH.MANAGE_BOOK,
+                    element: <ManageBooks />
                 },
             ]
         }
