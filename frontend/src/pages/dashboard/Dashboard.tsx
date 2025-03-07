@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router"
 import { getStats } from "../../apis/stats/stats.api";
 import { Stats } from "../../types/stats.type";
 import { MdIncompleteCircle } from "react-icons/md";
-import Loading from "../../components/Loading/Loading";
+// import { Loading } from "../../components/Loading/Loading";
 import RevenueChart from "./RevenueChart";
-import PATH from "../../routers/Path";
+import { Loading } from "../../components/Loading/Loading";
 
 const Dashboard = () => {
 

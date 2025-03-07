@@ -8,5 +8,6 @@ export interface Book {
     coverImage: string;
     oldPrice: number;
     newPrice: number;
+    quantity?: number;
 }
 

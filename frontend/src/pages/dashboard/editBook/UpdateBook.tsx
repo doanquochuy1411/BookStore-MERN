@@ -5,7 +5,7 @@ import SelectField from '../addBook/SelectField'
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 import { fetchBookById, updateBook } from '../../../apis/books/books.api';
-import Loading from '../../../components/Loading/Loading';
+import { Loading } from '../../../components/Loading/Loading';
 import { useEffect } from 'react';
 
 const UpdateBook = () => {

@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { Book } from '../../../types/book.type';
-import Swal from 'sweetalert2';
+import { SuccessNotify } from '../../../utils/notify';
 
 export interface CartState {
     cartItems: Book[];
@@ -21,24 +21,31 @@ export const cartSlice = createSlice({
         ) => {
             const existingItem = state.cartItems.find(item => item._id === payload._id);
             if (!existingItem) {
-                state.cartItems.push(payload)
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "Product Added to the Cart",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                state.cartItems.push({ ...payload, quantity: 1 })
+                SuccessNotify("Product Added to the Cart");
             } else {
-                Swal.fire({
-                    title: "Already Added to the Cart",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "OK!"
-                })
+                existingItem.quantity = (existingItem.quantity || 1) + 1;
+                SuccessNotify("Product quantity in the Cart: " + existingItem.quantity)
+            }
+        },
+        increaseQuantity: (
+            state: CartState,
+            { payload }: PayloadAction<Book>
+        ) => {
+            const existingItem = state.cartItems.find(item => item._id === payload._id);
+            if (existingItem) {
+                existingItem.quantity = (existingItem.quantity || 1) + 1;
+            } else {
+                state.cartItems.push({ ...payload, quantity: 1 })
+            }
+        },
+        decreaseQuantity: (
+            state: CartState,
+            { payload }: PayloadAction<Book>
+        ) => {
+            const existingItem = state.cartItems.find(item => item._id === payload._id);
+            if (existingItem?.quantity && existingItem?.quantity > 0) {
+                existingItem.quantity = (existingItem.quantity || 1) - 1;
             }
         },
         removeFromCart: (
@@ -56,5 +63,5 @@ export const cartSlice = createSlice({
 })
 
 // Export the actions
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions
+export const { addToCart, removeFromCart, clearCart, increaseQuantity, decreaseQuantity } = cartSlice.actions
 export default cartSlice.reducer;

@@ -1,5 +1,6 @@
 const PATH = {
     HOME: "/",
+    AUTH: "/auth",
     LOGIN: "login",
     REGISTER: "register",
     ORDER: "order",

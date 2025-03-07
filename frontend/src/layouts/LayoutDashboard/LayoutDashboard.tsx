@@ -1,11 +1,15 @@
-import { Link, Outlet } from "react-router"
+import { Link, Outlet, useNavigate } from "react-router"
 import Aside from "../../components/Aside";
 import PATH from "../../routers/Path";
+import { clearLocalStorage } from "../../helpers/helper";
 
 const LayoutDashboard: React.FC = (): JSX.Element => {
 
+    const navigate = useNavigate();
+
     const handelLogout = () => {
-        console.log("logout")
+        clearLocalStorage();
+        navigate(`${PATH.AUTH}`);
     }
 
     return (

@@ -16,6 +16,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import ManageBooks from "../pages/dashboard/ManageBooks/ManageBooks";
 import AddBook from "../pages/dashboard/addBook/AddBook";
 import UpdateBook from "../pages/dashboard/editBook/UpdateBook";
+import LayoutAuth from "../layouts/LayoutAuth";
 
 const useRouteElements = () => {
     let element = useRoutes([
@@ -32,14 +33,6 @@ const useRouteElements = () => {
                     element: <PrivateRoute><Order /></PrivateRoute>
                 },
                 {
-                    path: PATH.LOGIN,
-                    element: <Login />
-                },
-                {
-                    path: PATH.REGISTER,
-                    element: <Register />
-                },
-                {
                     path: PATH.CART,
                     element: <CartPage />
                 },
@@ -51,13 +44,26 @@ const useRouteElements = () => {
                     path: PATH.BOOK_DETAILS,
                     element: <SingleBook />
                 },
+            ]
+        }, {
+            path: PATH.AUTH,
+            element: <LayoutAuth />,
+            children: [
+                {
+                    index: true,
+                    element: <Login />
+                },
+                {
+                    path: PATH.REGISTER,
+                    element: <Register />
+                },
                 {
                     path: PATH.ADMIN,
                     element: <AdminLogin />
                 }
             ]
-        },
-        {
+        }
+        , {
             path: PATH.DASHBOARD,
             element: <AdminRoute> <LayoutDashboard /></AdminRoute>,
             children: [

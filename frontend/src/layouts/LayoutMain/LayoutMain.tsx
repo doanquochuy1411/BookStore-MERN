@@ -1,6 +1,7 @@
 import { Outlet } from "react-router"
 import Footer from "../../components/Footer"
 import Navbar from "../../components/Nabar"
+import { ToastContainer } from "react-toastify"
 
 const LayoutMain: React.FC = (): JSX.Element => {
     return (
@@ -10,6 +11,7 @@ const LayoutMain: React.FC = (): JSX.Element => {
                 <Outlet />
             </main>
             <Footer />
+            <ToastContainer />
         </div>
     )
 }

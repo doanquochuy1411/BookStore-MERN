@@ -6,7 +6,7 @@ const AdminRoute = ({ children }: { children: ReactNode }) => {
     const token = getLocalStorage(ACCESS_TOKEN)
 
     if (!token) {
-        return <Navigate to="/admin" />
+        return <Navigate to="/auth/admin" />
     }
 
     return children ? children : <Outlet />;

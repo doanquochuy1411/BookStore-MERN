@@ -4,7 +4,7 @@ const cors = require("cors")
 
 require('dotenv').config()
 
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
 const port = process.env.PORT || 5000;
 
 // middleware
@@ -20,17 +20,17 @@ const bookRoutes = require('./src/books/book.route')
 const orderRoutes = require('./src/orders/order.route')
 const userRoutes = require('./src/users/user.route')
 const adminRoutes = require('./src/stats/admin.stats')
+const cartRoutes = require('./src/carts/cart.route');
+const connectMongoDB = require('./src/db/connect');
 
 app.use("/api/books", bookRoutes)
 app.use("/api/orders", orderRoutes)
 app.use("/api/auth", userRoutes)
 app.use("/api/admin", adminRoutes)
+app.use("/api/carts", cartRoutes)
 
 async function main() {
-    await mongoose.connect(process.env.DB_URL)
-    app.use('/', (req, res)=>{
-        res.send('Book Store Server is running')
-    })
+    await connectMongoDB(process.env.DB_URL)
 }
 
 main().then(()=>{

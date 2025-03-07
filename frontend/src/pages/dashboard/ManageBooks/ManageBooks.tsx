@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { deleteBook, fetchAllBooks } from "../../../apis/books/books.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Book } from "../../../types/book.type";
-import Loading from "../../../components/Loading/Loading";
+import { Loading } from "../../../components/Loading/Loading";
 
 const ManageBooks = () => {
     const queryClient = useQueryClient();

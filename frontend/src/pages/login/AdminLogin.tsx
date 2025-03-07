@@ -4,13 +4,15 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { adminLogin } from '../../apis/auth/auth.api'
 import { ACCESS_TOKEN, removeLocalStorage, setLocalStorage } from '../../helpers/helper'
 import { useNavigate } from 'react-router'
+import { ErrorNotify } from '../../utils/notify'
+import { Loading, Spin } from '../../components/Loading/Loading'
 
 const AdminLogin = () => {
     const { register, handleSubmit, setError, formState: { errors } } = useForm<AdminLoginPayload>()
 
     const navigate = useNavigate();
 
-    const { mutate: handelLogin } = useMutation({
+    const { mutate: handelLogin, isPending } = useMutation({
         mutationKey: ["adminLogin"],
         mutationFn: (payload: AdminLoginPayload) => adminLogin(payload),
         onSuccess: (res) => {
@@ -22,13 +24,12 @@ const AdminLogin = () => {
                     navigate("/")
                 }, 3600 * 1000) // 1 hour
             }
-
-            alert("Admin login successfully!")
             navigate("/dashboard")
         },
         onError: (err) => {
-            console.log("Failed to login as admin", err)
-            alert("Failed to login as admin!")
+            console.log("Failed to login as admin", err);
+            ErrorNotify("Failed to login as admin");
+            setError("userName", { type: "manual", message: err.message || "Failed to login. Please try again." });
         }
     });
 
@@ -71,7 +72,9 @@ const AdminLogin = () => {
                     <div>
                         <button
                             className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none">
-                            Login
+                            {
+                                isPending ? <Spin /> : "Login"
+                            }
                         </button>
                     </div>
                 </form>

@@ -10,6 +10,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { useAuth } from '../../context/AuthContext';
 
+import type { MenuProps } from 'antd';
+import { Dropdown, Space } from 'antd';
+
 const navigation = [
     { name: "Dashboard", href: "/dashboard" },
     { name: "Orders", href: "/order" },
@@ -18,7 +21,6 @@ const navigation = [
 ]
 
 const Navbar = () => {
-    const [isDropdownOpen, setDropdownOpen] = useState(false)
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
 
     const { currentUser, logout } = useAuth();
@@ -27,8 +29,20 @@ const Navbar = () => {
         logout();
     }
 
+    const items: MenuProps['items'] = navigation.map((item) => ({
+        label: <Link className='pr-8' to={item.href}>{item.name}</Link>,
+        key: item.name,
+    }));
+
+    items.push({
+        label: 'Logout',
+        key: 'Logout',
+        onClick: handelLogout,
+    });
+
+
     return (
-        <header className='max-w-screen-2xl mx-auto px-4 py-6'>
+        <header className='max-w-screen-2xl w-full mx-auto px-4 py-6'>
             <nav className='flex justify-between items-center'>
                 {/* Left side */}
                 <div className="flex items-center md:gap-16 gap-4   ">
@@ -51,41 +65,17 @@ const Navbar = () => {
                     <div>
                         {
                             currentUser ? <>
-                                <button onClick={() => {
-                                    setDropdownOpen(!isDropdownOpen)
-                                }}>
-                                    <img src={avatarImg} alt="" className={`size-7 rounded-full ${currentUser ? 'ring-2 ring-blue-500' : ''}`} />
-                                </button>
-                                {/* Show dropdowns */}
-                                {
-                                    isDropdownOpen && (
-                                        <div className='absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40'>
-                                            <ul className='py-2'>
-                                                {
-                                                    navigation.map((item) => (
-                                                        <li key={item.name} onClick={() => {
-                                                            setDropdownOpen(!isDropdownOpen)
-                                                        }}>
-                                                            <Link to={item.href} className='block px-4 py-2 text-sm hover:bg-gray-100'>
-                                                                {item.name}
-                                                            </Link>
-                                                        </li>
-                                                    ))
-                                                }
-                                                <li>
-                                                    <button
-                                                        onClick={handelLogout}
-                                                        className='block w-full text-left px-4 py-2 text-sm hover:bg-gray-100'
-                                                    >
-                                                        Logout
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    )
-                                }
+                                <div className='cursor-pointer'>
+                                    <Dropdown menu={{ items }}>
+                                        <a onClick={(e) => e.preventDefault()}>
+                                            <Space>
+                                                <img src={avatarImg} alt="" className={`size-7 rounded-full ${currentUser ? 'ring-2 ring-blue-500' : ''}`} />
+                                            </Space>
+                                        </a>
+                                    </Dropdown>
+                                </div>
                             </> :
-                                <Link to="/login">
+                                <Link to="/auth">
                                     <HiOutlineUser className='size-6' />
                                 </Link>
                         }

@@ -4,15 +4,45 @@ import { RootState } from "../../redux/store"
 import { getImgUrl } from "../../utils/getImgUrl"
 import { useMemo } from "react"
 import { Book } from "../../types/book.type"
-import { clearCart, removeFromCart } from "../../redux/features/cart/cart.slice"
+import { clearCart, decreaseQuantity, increaseQuantity, removeFromCart } from "../../redux/features/cart/cart.slice"
+import { InputNumber } from "antd"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { addToCart, getCart } from "../../apis/carts/carts.api"
+import { Cart, PayLoadAddToCart } from "../../types/order.type"
 
 const CartPage = () => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems)
     const dispatch = useDispatch()
+    const queryClient = useQueryClient();
 
     const totalPrice = useMemo(() => {
-        return cartItems.reduce((acc, item) => acc + item.newPrice, 0).toFixed(2);
+        return cartItems.reduce((acc, item) => acc + (item.newPrice * (item.quantity || 1)), 0).toFixed(2);
     }, [cartItems])
+
+    const { data: cart } = useQuery<Cart>({
+        queryKey: ["cart"],
+        queryFn: () => getCart(),
+        gcTime: 0,
+        staleTime: 0
+    })
+
+    const { mutate: handelAddToCart } = useMutation({
+        mutationKey: ["addToCart"],
+        mutationFn: (payload: PayLoadAddToCart) => addToCart(payload),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["cart"],
+                exact: true,
+                type: "active"
+            })
+            console.log("Add to cart successfully")
+        },
+        onError: (err) => {
+            console.log("err: ", err.message)
+        }
+    })
+
+
 
     const handelRemoveCart = (product: Book) => {
         dispatch(removeFromCart(product))
@@ -20,6 +50,15 @@ const CartPage = () => {
 
     const handleClearCart = () => {
         dispatch(clearCart())
+    }
+
+    const handleIncreaseQuantity = (product: Book) => {
+        dispatch(increaseQuantity(product))
+        handelAddToCart({ productId: product._id, quantity: product.quantity || 1 });
+    }
+
+    const handleDecreaseQuantity = (product: Book) => {
+        dispatch(decreaseQuantity(product))
     }
 
     return (
@@ -67,7 +106,11 @@ const CartPage = () => {
                                                             <p className="mt-1 text-sm text-gray-500 capitalize"><strong>Category:</strong> {product?.category}</p>
                                                         </div>
                                                         <div className="flex flex-1 flex-wrap items-end justify-between space-y-2 text-sm">
-                                                            <p className="text-gray-500"><strong>Qty:</strong> 1</p>
+                                                            <div className="border">
+                                                                <button onClick={() => handleDecreaseQuantity(product)} className="px-2"> - </button>
+                                                                <InputNumber className="border-none w-8" readOnly={true} min={1} max={10} value={product?.quantity} size="small" controls={false} />
+                                                                <button onClick={() => handleIncreaseQuantity(product)} className="px-2"> + </button>
+                                                            </div>
 
                                                             <div className="flex">
                                                                 <button
@@ -90,8 +133,6 @@ const CartPage = () => {
                                     <p>No product found!</p>
                                 )
                         }
-
-
                     </div>
                 </div>
             </div>

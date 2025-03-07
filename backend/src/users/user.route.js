@@ -16,12 +16,14 @@ router.post("/admin", async (req, res) => {
             res.status(StatusCodes.NOT_FOUND).send(
                 ErrorResponse(StatusCodes.NOT_FOUND, "Admin not found!")
             )
+            return
         }
 
         if (password !== admin.password) {
             res.status(StatusCodes.UNAUTHORIZED).send(
                 ErrorResponse(StatusCodes.UNAUTHORIZED, "Invalid password!")
             )
+            return
         }
 
         const token = jwt.sign(
@@ -40,6 +42,7 @@ router.post("/admin", async (req, res) => {
                     }
                 }, "Login successfully")
         )
+        return
     } catch (error) {
         console.log("Invalid credentials", error)
         res.status(StatusCodes.UNAUTHORIZED).send(

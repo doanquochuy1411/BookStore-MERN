@@ -1,11 +1,15 @@
 const { StatusCodes } = require("http-status-codes");
 const { SuccessResponse, ErrorResponse } = require("../utils/responseHelper");
 const Order = require("./order.model");
+const OrderRepoClass = require("../repository/mongo/order.repo");
+const OrderServiceClass = require("../service/order.service")
+
+const orderRepo = new OrderRepoClass(Order); 
+const orderService = new OrderServiceClass(orderRepo);
 
 const createOrder = async (req, res) => {
-    try {
-        const newOrder = await Order({...req.body});
-        await newOrder.save();
+    try {   
+        const newOrder = await orderService.createOrder({...req.body});
         res.status(StatusCodes.OK).send(
             SuccessResponse(StatusCodes.OK, newOrder, "Order created successfully")
         )
@@ -20,7 +24,7 @@ const createOrder = async (req, res) => {
 const getOrderByEmail = async (req, res) => {
     try {
         const {email} = req.params;
-        const orders = await Order.find({email: email}).sort({createdAt: -1});
+        const orders = await orderService.getOrderByEmail(email);
         if (!orders) {
             return res.status(StatusCodes.NOT_FOUND).send(
                 ErrorResponse(StatusCodes.NOT_FOUND,"Order not found")

@@ -3,19 +3,24 @@ import { LoginPayload } from "../../types/login.type"
 import { Link, useNavigate } from "react-router"
 import { FaGoogle } from "react-icons/fa"
 import { useAuth } from "../../context/AuthContext"
+import { SuccessNotify } from "../../utils/notify"
+import { useState } from "react"
+import { Spin } from "../../components/Loading/Loading"
 
 const Register = () => {
     const { register, handleSubmit, setError, formState: { errors } } = useForm<LoginPayload>()
     const { registerUser, signInWithGoogle } = useAuth();
+    const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const onSubmit: SubmitHandler<LoginPayload> = (data) => {
-        console.log("data register", data)
+        setLoading(true);
         registerUser(data).then(() => {
-            alert("User registered successfully!");
+            SuccessNotify("User registered successfully!");
+            navigate("/login");
         }).catch((error) => {
             setError("email", { type: "manual", message: error.message || "Registration failed. Please try again." });
-        })
+        }).finally(() => setLoading(false))
     }
 
     const handelGoogleSignIn = () => {
@@ -30,7 +35,7 @@ const Register = () => {
     }
 
     return (
-        <div className="h-[calc(100vh-120px)] border flex justify-center items-center">
+        <div className="h-full border flex justify-center items-center">
             <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <h2 className="text-xl font-semibold mb-4">Please Register</h2>
 
@@ -63,14 +68,14 @@ const Register = () => {
                     {(errors.email || errors.password) && <p className="text-red-500 text-xs italic mb-3">Please enter valid email and password</p>}
                     <div>
                         <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none">
-                            Register
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none w-36 h-10">
+                            {loading ? <Spin /> : "Register"}
                         </button>
                     </div>
 
                     <p
                         className="align-baseline font-medium mt-4 text-sm">
-                        Have an account? Please <Link to="/login" className="text-blue-500 hover:text-blue-700">Login</Link>
+                        Have an account? Please <Link to="/auth" className="text-blue-500 hover:text-blue-700">Login</Link>
                     </p>
 
                     {/* google sign in */}
