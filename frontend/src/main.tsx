@@ -6,11 +6,25 @@ import App from './App.tsx'
 import { Provider } from 'react-redux'
 import { store } from './redux/store.ts';
 import 'sweetalert2/dist/sweetalert2.js'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import AuthProvider from './context/AuthContext.tsx';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // Không fetch lại dữ liệu khi người dùng chuyển tab
+    }
+  }
+})
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </QueryClientProvider>
+    </AuthProvider>
   </Provider>,
 )

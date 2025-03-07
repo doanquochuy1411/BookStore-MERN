@@ -6,18 +6,20 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
 
 import 'swiper/swiper-bundle.css';
+import { useQuery } from '@tanstack/react-query'
+import { fetchAllBooks } from '../../apis/books/books.api'
 
 const categories = ["Choose a genre", "Business", "Fiction", "Horror", "Adventure"]
 
 const TopSellers = () => {
-    const [books, setBooks] = useState<Book[]>([])
     const [selectedCategory, setSelectedCategory] = useState<string>("Choose a genre")
 
-    useEffect(() => {
-        fetch("books.json")
-            .then(res => res.json())
-            .then((data) => setBooks(data))
-    }, [])
+    const { data: books = [] } = useQuery<Book[]>({
+        queryKey: ["books"],
+        queryFn: fetchAllBooks,
+        gcTime: 0,
+        staleTime: 0
+    })
 
     const filteredBooks = useMemo(() => {
         return selectedCategory === "Choose a genre" ?
